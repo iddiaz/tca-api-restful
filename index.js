@@ -64,14 +64,31 @@ app.post('/api/product', (req, res) =>{
   })
 });
 
-// actualizaciones
+// actualizaciones de producto
 app.put('/api/product/:productId', (req,res)=> {
+  let productId = req.params.productId;
+  let update = req.body;
 
+  Product.findByIdAndUpdate(productId, update, (err, productUpdate)=> {
+    if(err) res.status(500).send({message: `Error al actualizar el producto ${err}`});
+
+    res.status(200).send({product: productUpdate});
+  });
 });
 
 // borrar producto bd
 app.delete('/api/product/:productId', (req,res) =>{
+  let productId = req.params.productId;
 
+  Product.findById(productId, (err, product) =>{
+    if(err) res.status(500).send({message: `Error al borrar el producto ${err}`});
+
+    product.remove(err =>{
+      if(err) res.status(500).send({message: `Error al borrar el producto ${err}`});
+
+      res.status(200).send({message: 'El producto ha sido eliminado'})
+    })
+  })
 });
 
 // conexion con bd
