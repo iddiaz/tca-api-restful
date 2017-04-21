@@ -2,8 +2,9 @@
 
 const express = require('express');
 const ProductCtrl = require('./../controllers/product')
-const api = express.Router();
+const userCtrl = require('./../controllers/user');
 const auth = require('./../middlewares/auth');
+const api = express.Router();
 
 
 // obtener productos
@@ -21,8 +22,12 @@ api.put('/product/:productId', ProductCtrl.updateProduct);
 // borrar producto bd
 api.delete('/product/:productId', ProductCtrl.deleteProduct );
 
+// registro
+api.post('/signup', userCtrl.signUp);
+// Login
+api.post('/signin', userCtrl.signIn);
 // Ruta privada
-api.get('/private', auth.isAuth, function( req, res) {
+api.get('/private', auth, ( req, res) => {
   res.status(200).send({message: 'Tienes acceso'});
 });
 
